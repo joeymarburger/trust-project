@@ -25,7 +25,7 @@ const sourceWords = [
 const sourceRegex = new RegExp(sourceWords.join('|'), 'gi');
 
 const hasASourceWord = _.compose(_.length, _.match(sourceRegex));
-const removeQuotes = _.replace(/“.*”/, '');
+const removeQuotes = _.replace(/“.*”/g, '');
 const getSentencesWithSourceWords = _.compose(_.map(removeQuotes), _.filter(hasASourceWord), getSentencesFromArticle);
 const getNamesFromSentence = sentence => nlp.text(sentence).people().filter(person => person.firstName || person.lastName).map(person => person.text.replace(',', '')).join(', ');
 const getSources = _.compose(_.join(', '), _.filter(_.length), _.map(getNamesFromSentence), getSentencesWithSourceWords);

@@ -1,5 +1,4 @@
 const _ = require('ramda');
-const getSentencesFromArticle = require('get-sentences-from-article');
 const nlp = require('nlp_compromise');
 
 const sourceWords = [
@@ -20,14 +19,16 @@ const sourceWords = [
   'corrected',
   'paused',
   'in an interview',
-  'at a press conference'
+  'at a press conference',
+  '“'
 ];
 const sourceRegex = new RegExp(sourceWords.join('|'), 'gi');
 
-const hasASourceWord = _.compose(_.length, _.match(sourceRegex));
+const getSentencesFromText = article => nlp.text(article).sentences.map(sentence => sentence.str);
+const getCountOfSourceWords = _.compose(_.length, _.match(sourceRegex));
 const removeQuotes = _.replace(/“.*”/g, '');
-const getSentencesWithSourceWords = _.compose(_.map(removeQuotes), _.filter(hasASourceWord), getSentencesFromArticle);
-const getNamesFromSentence = sentence => nlp.text(sentence).people().filter(person => person.firstName || person.lastName).map(person => person.text.replace(',', '')).join(', ');
+const getSentencesWithSourceWords = _.compose(_.map(removeQuotes), _.filter(getCountOfSourceWords), getSentencesFromText);
+const getNamesFromSentence = sentence => nlp.sentence(sentence).people().filter(person => person.firstName || person.lastName).map(person => person.text.replace(',', '')).join(', ');
 const getSources = _.compose(_.join(', '), _.filter(_.length), _.map(getNamesFromSentence), getSentencesWithSourceWords);
 
 const article = `WASHINGTON — If President-elect Donald J. Trump wanted a cabinet secretary who could help him dismantle and replace President Obama’s health care law, he could not have found anyone more prepared than Representative Tom Price, who has been studying how to accomplish that goal for more than six years. Mr. Price, an orthopedic surgeon who represents many of the northern suburbs of Atlanta, speaks with the self-assurance of a doctor about to perform another joint-replacement procedure. He knows the task and will proceed with brisk efficiency.

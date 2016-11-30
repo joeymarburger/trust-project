@@ -12,16 +12,15 @@ loadNextFile = function() {
 };
 
 var jsInsert = document.createElement('script');
-jsInsert.setAttribute('src', 'http://cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
+jsInsert.setAttribute('src', '//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
 jsInsert.onload = loadNextFile;
 document.body.appendChild(jsInsert);
-
 
 confirmExtFiles = function () {
 console.log('Trust Bar dependencies loaded!');
 
 jsLoaded2 = true;
-var _ = window.R;
+var R = window.R;
 var nlp = window.nlp_compromise;
 
 const sourceWords = [
@@ -50,31 +49,31 @@ const sourceRegex = new RegExp(sourceWords.join('|'), 'gi');
 const getTextFromTag = tag => tag.innerText;
 const getSentencesFromText = text => nlp.text(text).sentences.map(sentence => sentence.str);
 const getSentencesFromTag = tag => {
-  return _.compose(_.map((sentence) => ({
+  return R.compose(R.map((sentence) => ({
     sentence,
     tag
-  })), _.map(formatSentence), _.filter(hasAtLeastOneSourceWord), getSentencesFromText, getTextFromTag)(tag);
+  })), R.map(formatSentence), R.filter(hasAtLeastOneSourceWord), getSentencesFromText, getTextFromTag)(tag);
 };
-const getSentencesFromTags = _.map(getSentencesFromTag);
-const hasAtLeastOneSourceWord = _.test(sourceRegex);
-const removeNewlines = _.replace(/\n/g, '');
+const getSentencesFromTags = R.map(getSentencesFromTag);
+const hasAtLeastOneSourceWord = R.test(sourceRegex);
+const removeNewlines = R.replace(/\n/g, '');
 const removeSpacesFromBeginningAndEnd = text => {
   let newText = text;
   if (newText[0] === ' ') {
-    newText = _.slice(1, newText.length, newText);
+    newText = R.slice(1, newText.length, newText);
   }
   if (newText[newText.length - 1] === ' ') {
-    newText = _.slice(0, newText.length - 1, newText);
+    newText = R.slice(0, newText.length - 1, newText);
   }
   return newText;
 };
-const formatSentence = _.compose(removeSpacesFromBeginningAndEnd, removeNewlines);
-const getSentenceObjectsWithSourceWords = _.compose(_.flatten, getSentencesFromTags);
+const formatSentence = R.compose(removeSpacesFromBeginningAndEnd, removeNewlines);
+const getSentenceObjectsWithSourceWords = R.compose(R.flatten, getSentencesFromTags);
 
 const createAnchor = sentenceObj => {
   sentenceObj.tag.insertAdjacentHTML('afterbegin', `<span style='display: inline;' id='${createId(sentenceObj.tag)}'></span>`);
 };
-const createAnchors = _.forEach(createAnchor);
+const createAnchors = R.forEach(createAnchor);
 
 const createId = (tag) => {
   return encodeURI(`trust-${getTextFromTag(tag)}`);

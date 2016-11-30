@@ -1,0 +1,17 @@
+{
+  "name": "trust",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "get-sentences-from-article": "^1.0.4",
+    "nlp_compromise": "^6.5.3",
+    "ramda": "^0.22.1",
+    "sentence-tokenizer": "0.0.7"
+  }
+}

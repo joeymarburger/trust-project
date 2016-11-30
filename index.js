@@ -3,7 +3,7 @@ const nlp = require('nlp_compromise');
 
 // For the HTML:
 // <script src="//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js"></script>
-// <script src="https://unpkg.com/nlp_compromise@latest/builds/nlp_compromise.min.js"></script>
+// <script src="//unpkg.com/nlp_compromise@latest/builds/nlp_compromise.min.js"></script>
 // <script>
 //   var _ = window.ramda;
 //   var nlp = window.nlp_compromise;

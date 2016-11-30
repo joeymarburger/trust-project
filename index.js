@@ -1,6 +1,13 @@
 const _ = require('ramda');
 const nlp = require('nlp_compromise');
 
+// For the HTML:
+// <script src="//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js"></script>
+// <script src="https://unpkg.com/nlp_compromise@latest/builds/nlp_compromise.min.js"></script>
+// <script>
+//   var _ = window.ramda;
+//   var nlp = window.nlp_compromise;
+
 const sourceWords = [
   'said',
   'told',
@@ -20,16 +27,29 @@ const sourceWords = [
   'paused',
   'in an interview',
   'at a press conference',
-  '“'
+  '“.*”'
 ];
 const sourceRegex = new RegExp(sourceWords.join('|'), 'gi');
 
 const getSentencesFromText = article => nlp.text(article).sentences.map(sentence => sentence.str);
 const getCountOfSourceWords = _.compose(_.length, _.match(sourceRegex));
-const removeQuotes = _.replace(/“.*”/g, '');
-const getSentencesWithSourceWords = _.compose(_.map(removeQuotes), _.filter(getCountOfSourceWords), getSentencesFromText);
-const getNamesFromSentence = sentence => nlp.sentence(sentence).people().filter(person => person.firstName || person.lastName).map(person => person.text.replace(',', '')).join(', ');
-const getSources = _.compose(_.join(', '), _.filter(_.length), _.map(getNamesFromSentence), getSentencesWithSourceWords);
+const removeNewlines = _.replace(/\n/g, '');
+const removeSpacesFromBeginningAndEnd = text => {
+  let newText = text;
+  if (newText[0] === ' ') {
+    newText = _.slice(1, newText.length, newText);
+  }
+  if (newText[newText.length - 1] === ' ') {
+    newText = _.slice(0, newText.length - 1, newText);
+  }
+  return newText;
+};
+const formatSentence = _.compose(removeSpacesFromBeginningAndEnd, removeNewlines);
+const getSentencesWithSourceWords = _.compose(_.map(formatSentence), _.filter(getCountOfSourceWords), getSentencesFromText);
+// </script>
+
+// const getNamesFromSentence = sentence => nlp.sentence(sentence).people().filter(person => person.firstName || person.lastName || person.honourific).map(person => person.text.replace(',', '')).join(', ');
+// const getSources = _.compose(_.join(', '), _.filter(_.length), _.map(getNamesFromSentence), _.map(removeQuotes), getSentencesWithSourceWords);
 
 const article = `WASHINGTON — If President-elect Donald J. Trump wanted a cabinet secretary who could help him dismantle and replace President Obama’s health care law, he could not have found anyone more prepared than Representative Tom Price, who has been studying how to accomplish that goal for more than six years. Mr. Price, an orthopedic surgeon who represents many of the northern suburbs of Atlanta, speaks with the self-assurance of a doctor about to perform another joint-replacement procedure. He knows the task and will proceed with brisk efficiency.
 
@@ -93,4 +113,4 @@ Ms. Verma worked closely with Gov. Mike Pence of Indiana, the vice president-ele
 
 Under Mr. Obama, the agency that runs Medicare and Medicaid has also led efforts to carry out the Affordable Care Act, supervising most of the online marketplaces where people can buy health insurance and obtain subsidies to help cover the cost.`;
 
-console.log(getSources(article));
+console.log(getSentencesWithSourceWords(article));

@@ -75,8 +75,14 @@ const createAnchor = sentenceObj => {
 };
 const createAnchors = R.forEach(createAnchor);
 
-const createId = (tag) => {
+const createId = tag => {
   return encodeURI(`trust-${getTextFromTag(tag)}`);
+};
+const getDomain = hostName => {
+  return hostName.split('.').slice(-2).join('.');
+};
+const createGoogleSearchUrl = tag => {
+  return `google.com/search?q=${encodeURI(getTextFromTag(tag))}+-:${getDomain(window.location.hostname)}`;
 };
 
 
@@ -87,42 +93,44 @@ const createId = (tag) => {
 
   var trustBarWrapper = document.createElement("div");
   trustBarWrapper.id = "trust-bar-wrapper";
-  
+
   var trustBarSources = document.createElement("div");
   trustBarSources.id = "trust-bar-sources";
   trustBarSources.className = "trust-bar-content";
   trustBarSources.innerHTML = '<h6><strong>SOURCES</strong></h6>';
-  
+
   var trustBarSourcesList = document.createElement("ol");
   trustBarSourcesList.id = "trust-sources-list";
-  
+
   var tagsToLookAt = document.querySelectorAll('p');
   var sourceTagsArr = getSentenceObjectsWithSourceWords(tagsToLookAt);
-  
+
   createAnchors(sourceTagsArr);
-  
+
   if (sourceTagsArr.length > 0) {
     sourceTagsArr.forEach(function(e){
-      trustBarSourcesList.innerHTML += `<li>${e.sentence} <strong><a href="#${createId(e.tag)}" title="Source">Show</a></strong></li><hr>`;
+      trustBarSourcesList.innerHTML += `<li>${e.sentence} <strong>
+      <a href="#${createId(e.tag)}" title="Source">Show</a></strong></li><hr>
+      <a href="#${createGoogleSearchUrl(e.tag)}" title="Search" target="_blank">Search on Google</a></strong></li><hr>`;
     });
   } else {
     trustBarSourcesList.innerHTML += '<li><em>No sources found.</em></li>';
   }
-  
+
   trustBarSources.appendChild(trustBarSourcesList);
   trustBarSources.innerHTML += '<hr>';
   trustBarWrapper.appendChild(trustBarSources);
-  
+
   var trustBarMeta = document.createElement("div");
   trustBarMeta.id = "trust-bar-meta";
   trustBarMeta.className = "trust-bar-content";
   trustBarMeta.innerHTML = '<h6><strong>PUBLISHER</small></strong></h6><div class="row small-collapse expanded"><div class="small-6 columns"><p>Correction <a href="#" title="Correction"><i class="fa fa-check-circle"></i></a> <i class="fa fa-times-circle"></i></p></div><div class="small-6 columns"><p>Author <a href="#" title="Author"><i class="fa fa-check-circle"></i></a> <i class="fa fa-times-circle"></i></p></div><div class="small-6 columns"><p>Ethics <a href="#" title="Ethics"><i class="fa fa-check-circle"></i></a></p></div><div class="small-6 columns"><p>Location <a href="#" title="Author"><i class="fa fa-check-circle"></i></a> <i class="fa fa-times-circle"></i></p></div><hr>';
-  trustBarWrapper.appendChild(trustBarMeta);  
-  
+  trustBarWrapper.appendChild(trustBarMeta);
+
   // Append all HTML
   sideBar.appendChild(trustBarWrapper);
   document.getElementsByTagName('body')[0].appendChild(sideBar);
-  
+
   // Handle close link
   var closeLink = document.getElementById('trust-close');
   closeLink.onclick = closeTrustBar;
@@ -133,6 +141,3 @@ const createId = (tag) => {
 
 
 }; // confirmExtFiles
-
-
-

@@ -1,0 +1,17 @@
+/*
+  Styles for trust sidebar bookmarklet
+*/
+
+#trust-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  padding: 15px;
+  z-index: 9999;
+  background: white;
+  border-left: 1px solid #c2c3c6;
+  color: #1f1f1f;
+  font-family: sans-serif;
+}

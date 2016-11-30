@@ -1,9 +1,23 @@
-console.log('Trust Bar loaded!');
-
 var jsLoaded1 = false;
 var jsLoaded2 = false;
+var loadNextFile, confirmExtFiles;
 
-var confirmExtFiles = function () {
+loadNextFile = function() {
+  console.log('Trust Bar loaded!');
+  jsLoaded1 = true;
+  var jsInsert2 = document.createElement('script');
+  jsInsert2.setAttribute('src', '//unpkg.com/nlp_compromise@latest/builds/nlp_compromise.min.js');
+  document.body.appendChild(jsInsert2);
+  jsInsert2.onload = confirmExtFiles;
+};
+
+var jsInsert = document.createElement('script');
+jsInsert.setAttribute('src', '//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
+jsInsert.onload = loadNextFile;
+document.body.appendChild(jsInsert);
+
+
+confirmExtFiles = function () {
 console.log('Trust Bar dependencies loaded!');
 
 jsLoaded2 = true;
@@ -121,14 +135,5 @@ const createId = (tag) => {
 
 }; // confirmExtFiles
 
-var loadNextFile = function() {
-  jsLoaded1 = true;
-  var jsInsert2 = document.createElement('script');
-  jsInsert2.setAttribute('src', '//unpkg.com/nlp_compromise@latest/builds/nlp_compromise.min.js');
-  document.body.appendChild(jsInsert2);
-  jsInsert2.onload = confirmExtFiles;
-};
-var jsInsert = document.createElement('script');
-jsInsert.setAttribute('src', '//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
-jsInsert.onload = loadNextFile;
-document.body.appendChild(jsInsert);
+
+

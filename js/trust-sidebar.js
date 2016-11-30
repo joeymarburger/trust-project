@@ -11,10 +11,10 @@ loadNextFile = function() {
   jsInsert2.onload = confirmExtFiles;
 };
 
-var jsInsert = document.createElement('script');
-jsInsert.setAttribute('src', '//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
-jsInsert.onload = loadNextFile;
-document.body.appendChild(jsInsert);
+var jsInsert1 = document.createElement('script');
+jsInsert1.setAttribute('src', '//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
+jsInsert1.onload = loadNextFile;
+document.body.appendChild(jsInsert1);
 
 confirmExtFiles = function () {
 console.log('Trust Bar dependencies loaded!');

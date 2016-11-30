@@ -12,7 +12,7 @@ loadNextFile = function() {
 };
 
 var jsInsert = document.createElement('script');
-jsInsert.setAttribute('src', '//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
+jsInsert.setAttribute('src', 'http://cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
 jsInsert.onload = loadNextFile;
 document.body.appendChild(jsInsert);
 

@@ -1,5 +1,7 @@
 console.log('Trust Bar loaded!');
-//console.log(window.R);
+
+var jsLoaded1 = false;
+var jsLoaded2 = false;
 
 var confirmExtFiles = function () {
 var _ = window.R;
@@ -30,14 +32,14 @@ const sourceRegex = new RegExp(sourceWords.join('|'), 'gi');
 
 const getTextFromTag = tag => tag.innerText;
 const getSentencesFromText = text => nlp.text(text).sentences.map(sentence => sentence.str);
-const getSentencesFromTags = _.map(getSentencesFromTag);
-const hasAtLeastOneSourceWord = _.test(sourceRegex);
 const getSentencesFromTag = tag => {
   return _.compose(_.map((sentence) => ({
     sentence,
     tag
   })), _.map(formatSentence), _.filter(hasAtLeastOneSourceWord), getSentencesFromText, getTextFromTag)(tag);
 };
+const getSentencesFromTags = _.map(getSentencesFromTag);
+const hasAtLeastOneSourceWord = _.test(sourceRegex);
 const removeNewlines = _.replace(/\n/g, '');
 const removeSpacesFromBeginningAndEnd = text => {
   let newText = text;
@@ -52,14 +54,14 @@ const removeSpacesFromBeginningAndEnd = text => {
 const formatSentence = _.compose(removeSpacesFromBeginningAndEnd, removeNewlines);
 const getSentenceObjectsWithSourceWords = _.compose(_.flatten, getSentencesFromTags);
 
+const createAnchor = sentenceObj => {
+  sentenceObj.tag.insertAdjacentHTML('afterbegin', `<span style='display: inline;' id='${createId(sentenceObj.tag)}'></span>`);
+};
 const createAnchors = _.forEach(createAnchor);
-const createAnchor = tag => {
-  tag.insertAdjacentHTML('afterbegin', `<span style='display: inline;' id='${createId(tag)}'></span>`);
-};
+
 const createId = (tag) => {
-  return `trust-${getTextFromTag(tag)}`;
+  return escape(`trust-${getTextFromTag(tag)}`);
 };
-const createAnchorsForSentencesWithSourceWords = _.compose(createAnchors, getSentenceObjectsWithSourceWords);
 
 
   // Build sidebar via HTML injection
@@ -73,11 +75,26 @@ const createAnchorsForSentencesWithSourceWords = _.compose(createAnchors, getSen
   var trustBarSources = document.createElement("div");
   trustBarSources.id = "trust-bar-sources";
   trustBarSources.className = "trust-bar-content";
-  trustBarSources.innerHTML = '<h6><strong>SOURCES</strong></h6><ol id="trust-sources-list">';
+  trustBarSources.innerHTML = '<h6><strong>SOURCES</strong></h6>';
   
-  trustBarSources.innerHTML += '<li>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua," said Source Name One. <strong><a href="#" title="Source">Show</a></strong></li><hr>';
+  var trustBarSourcesList = document.createElement("ol");
+  trustBarSourcesList.id = "trust-sources-list";
   
-  trustBarSources.innerHTML += '</ol><hr>';
+  var tagsToLookAt = document.querySelectorAll('p');
+  var sourceTagsArr = getSentenceObjectsWithSourceWords(tagsToLookAt);
+  
+  createAnchors(sourceTagsArr);
+  
+  if (sourceTagsArr.length > 0) {
+    sourceTagsArr.forEach(function(e){
+      trustBarSourcesList.innerHTML += `<li>${e.sentence} <strong><a href="#${createId(e.tag)}" title="Source">Show</a></strong></li><hr>`;
+    });
+  } else {
+    trustBarSourcesList.innerHTML += '<li><em>No sources found.</em></li>';
+  }
+  
+  trustBarSources.appendChild(trustBarSourcesList);
+  trustBarSources.innerHTML += '<hr>';
   trustBarWrapper.appendChild(trustBarSources);
   
   var trustBarMeta = document.createElement("div");
@@ -97,10 +114,6 @@ const createAnchorsForSentencesWithSourceWords = _.compose(createAnchors, getSen
     document.getElementById("trust-sidebar").remove();
     return false;
   };
-
-
-var tagsToLookAt = document.querySelectorAll('p');
-createAnchorsForSentencesWithSourceWords(tagsToLookAt);
 
 
 }; // confirmExtFiles

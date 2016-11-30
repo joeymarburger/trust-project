@@ -18,7 +18,7 @@ javascript:(function(){
 	fileInsert3.setAttribute('rel', 'stylesheet');
 	fileInsert3.setAttribute('href', trustCSSPath+'css/trust-sidebar.css');
 	document.getElementsByTagName('head')[0].appendChild(fileInsert3);
-	var jsInsert = document.createElement('script');
-	jsInsert.setAttribute('src', trustJSPath+'js/trust-sidebar.js');
-	document.body.appendChild(jsInsert);
+	var jsInsert3 = document.createElement('script');
+	jsInsert3.setAttribute('src', trustJSPath+'js/trust-sidebar.js');
+	document.body.appendChild(jsInsert3);
 })();

@@ -1,6 +1,14 @@
 (function(){
   console.log('Trust Bar loaded!');
   
+  // Load Sources dependencies
+	var jsInsert = document.createElement('script');
+	jsInsert.setAttribute('src', '//cdnjs.cloudflare.com/ajax/libs/ramda/0.17.1/ramda.min.js');
+	document.body.appendChild(jsInsert);
+	var jsInsert2 = document.createElement('script');
+	jsInsert2.setAttribute('src', '//unpkg.com/nlp_compromise@latest/builds/nlp_compromise.min.js');
+	document.body.appendChild(jsInsert2);
+  
   // Build sidebar via HTML injection
   var sideBar = document.createElement("div");
   sideBar.id = "trust-sidebar";

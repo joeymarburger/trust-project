@@ -109,9 +109,9 @@ const createGoogleSearchUrl = tag => {
 
   if (sourceTagsArr.length > 0) {
     sourceTagsArr.forEach(function(e){
-      trustBarSourcesList.innerHTML += `<li>${e.sentence} <strong>
-      <a href="#${createId(e.tag)}" title="Source">Show</a></strong></li><hr>
-      <a href="${createGoogleSearchUrl(e.tag)}" title="Search" target="_blank">Search on Google</a></strong></li><hr>`;
+      trustBarSourcesList.innerHTML += `<li>${e.sentence} <p><small><strong>
+      <a href="#${createId(e.tag)}" title="Source">Show</a></strong> |
+      <strong><a href="${createGoogleSearchUrl(e.tag)}" title="Search" target="_blank">Search on Google</a></strong></small></p></li><hr>`;
     });
   } else {
     trustBarSourcesList.innerHTML += '<li><em>No sources found.</em></li>';

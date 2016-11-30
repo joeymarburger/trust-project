@@ -82,7 +82,7 @@ const getDomain = hostName => {
   return hostName.split('.').slice(-2).join('.');
 };
 const createGoogleSearchUrl = tag => {
-  return `google.com/search?q=${encodeURI(getTextFromTag(tag))}+-:${getDomain(window.location.hostname)}`;
+  return `//google.com/search?q=${encodeURI(getTextFromTag(tag))}+-:${getDomain(window.location.hostname)}`;
 };
 
 

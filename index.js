@@ -63,6 +63,7 @@ const createId = (tag) => {
   return `trust-${getTextFromTag(tag)}`;
 };
 const createAnchorsForSentencesWithSourceWords = _.compose(createAnchors, getSentenceObjectsWithSourceWords);
+
 createAnchorsForSentencesWithSourceWords(document.querySelectorAll('p'));
 
 // </script>

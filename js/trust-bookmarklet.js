@@ -16,7 +16,7 @@ javascript:(function(){
 	document.getElementsByTagName('head')[0].appendChild(fileInsert2);
 	var fileInsert3 = document.createElement('link');
 	fileInsert3.setAttribute('rel', 'stylesheet');
-	fileInsert3.setAttribute('href', trustCSSPath+'css/trust-sidebar.css');
+	fileInsert3.setAttribute('href', trustCSSPath+'css/trust-sidebar.min.css');
 	document.getElementsByTagName('head')[0].appendChild(fileInsert3);
 	var jsInsert3 = document.createElement('script');
 	jsInsert3.setAttribute('src', trustJSPath+'js/trust-sidebar.js');
